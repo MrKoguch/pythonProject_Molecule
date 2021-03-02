@@ -1,0 +1,9 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+../venv/
+# Datasource local storage ignored files
+/../../../../../../:\Users\Polina\PycharmProjects\pythonProject_Molecule\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
