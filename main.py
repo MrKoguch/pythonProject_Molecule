@@ -62,6 +62,23 @@ class Molecule:
         # возвращает генератор
         return iter(self._atoms)
 
+    def iter_bonds(self):
+        return IterBonds(self._bonds)
+
+
+class IterBonds:
+    def __init__(self, adj):
+        self._bonds = adj
+
+    def __iter__(self):
+        seen = set()
+        for map1, nb in self._bonds.items():
+            for map2 in nb:
+                if map2 in seen:
+                    continue
+                yield map1, map2
+            seen.add(map1)
+
 
 ol = Molecule()
 ol.add_atom("C")
@@ -80,13 +97,5 @@ ol.add_bond(6, 4, 1)
 ol.add_bond(6, 5, 2)
 print(ol.get_bonds())
 
-# # for i in ol.iter_bonds():
-# #     print(i)
-# x = ol.iter_bonds()
-# while True:
-#     try:
-#         n = next(x)
-#     except StopIteration:
-#         break
-#     else:
-#         print(n)
+for i in ol.iter_bonds():
+    print(i)
