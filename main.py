@@ -62,6 +62,69 @@ class Molecule:
         # возвращает генератор
         return iter(self._atoms)
 
+# ________________________________________HW 05.03.2021_____________________________________________
+class IterBonds:
+    def __init__(self, _bonds):
+        self._bonds = _bonds
+
+    def __iter__(self):
+        seen = set()
+        for map1, nb in self._bonds.items():
+            for map2 in nb:
+                if map2 in seen:
+                    continue
+                yield map1, map2
+            seen.add(map1)
+
+    def __contains__(self, q):
+        if isinstance(q, int):
+            return q in self._atoms  # выдает № in m true or false
+        elif isinstance(q, Atom):
+            return q in self._atoms.values()  # q == a
+        else:
+            raise TypeError
+
+
+class Atom:
+    def __init__(self, isotope=None):
+        self._isotope = isotope
+
+    def __eq__(self, other):  # проверяем являемся тем же или ниже по цепи наследования
+        return isinstance(self, type(other)) and self._isotope == other._isotope
+
+
+class C(Atom):
+    def __init__(self, atom="C", isotope=None):
+        self._isotope = isotope
+        self._atom = atom
+
+
+class Bond:
+    def __init__(self, bond=None):
+        self._bond = bond
+
+
+class DoubleBond(Bond):
+    def __init__(self, bond=2):
+        self._bond = bond
+
+
+class IterAtoms:
+    def __init__(self, _atoms):
+        self._atoms = _atoms
+
+    def __iter__(self):
+        seen = set()
+        for atom, el in self._atoms.items():
+            if atom in seen:
+                continue
+            yield atom, el
+
+    def __contains__(self, atom, el):
+        if isinstance(atom, int) and isinstance(el, Atom):
+            return atom, el in self._atoms.items()
+        else:
+            raise TypeError
 
 ol = Molecule()
 ol.add_atom("C")
@@ -79,6 +142,12 @@ ol.add_bond(3, 5, 2)
 ol.add_bond(6, 4, 1)
 ol.add_bond(6, 5, 2)
 print(ol.get_bonds())
+bonds = IterBonds(ol._bonds)
+for bond in bonds:
+    print(bond)
+atoms = IterAtoms(ol._atoms)
+for atom in atoms:
+    print(atom)
 
 # # for i in ol.iter_bonds():
 # #     print(i)
